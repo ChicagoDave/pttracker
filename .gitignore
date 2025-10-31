@@ -53,3 +53,11 @@ uploads/
 
 # Authentication credentials
 .auth.json
+
+# Debug and test scripts
+debug-*.ts
+debug-*.js
+*-debug.ts
+*-debug.js
+test-*.ts
+test-*.js
