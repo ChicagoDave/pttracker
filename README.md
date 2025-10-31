@@ -300,6 +300,14 @@ node dist/database/db.js
 
 MIT License - feel free to use for personal or commercial projects.
 
+## Support the Project
+
+If you find this poker tracker useful, consider supporting its development:
+
+[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=FNSMPSCM92Y74)
+
+Your support helps maintain and improve this project!
+
 ## Support
 
 For issues and questions:
