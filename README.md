@@ -2,6 +2,10 @@
 
 A mobile-friendly web application for tracking poker sessions, buy-ins, cash-outs, and profits. Built with Node.js, TypeScript, SQLite, and Bootstrap.
 
+[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=FNSMPSCM92Y74)
+
+---
+
 ## 🚀 One-Click Deploy
 
 Deploy your own instance in minutes - no technical knowledge required!
@@ -325,14 +329,6 @@ node dist/database/db.js
 ## License
 
 MIT License - feel free to use for personal or commercial projects.
-
-## Support the Project
-
-If you find this poker tracker useful, consider supporting its development:
-
-[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=FNSMPSCM92Y74)
-
-Your support helps maintain and improve this project!
 
 ## Support
 
