@@ -133,11 +133,11 @@ poker-tracker/
 
 This application can be deployed to various hosting platforms. See the `docs/deployment/` directory for detailed guides:
 
-- **[Heroku](docs/deployment/HEROKU.md)** - Free tier available, easy deployment
-- **[Railway](docs/deployment/RAILWAY.md)** - Modern platform with free tier
-- **[Render](docs/deployment/RENDER.md)** - Free tier with auto-deploy from GitHub
-- **[Fly.io](docs/deployment/FLY.md)** - Global app deployment with free allowance
-- **[DigitalOcean](docs/deployment/DIGITALOCEAN.md)** - VPS deployment with full control
+- **[Heroku](docs/deployment/HEROKU.md)** ([Sign up](https://signup.heroku.com/)) - Free tier available, easy deployment
+- **[Railway](docs/deployment/RAILWAY.md)** ([Sign up](https://railway.app/)) - Modern platform with free tier
+- **[Render](docs/deployment/RENDER.md)** ([Sign up](https://render.com/)) - Free tier with auto-deploy from GitHub
+- **[Fly.io](docs/deployment/FLY.md)** ([Sign up](https://fly.io/app/sign-up)) - Global app deployment with free allowance
+- **[DigitalOcean](docs/deployment/DIGITALOCEAN.md)** ([Sign up](https://www.digitalocean.com/)) - VPS deployment with full control
 
 ### Quick Deployment Tips
 
