@@ -1,0 +1,41 @@
+{
+  "name": "Poker Tracker",
+  "description": "Mobile-friendly poker session tracker with authentication and statistics",
+  "repository": "https://github.com/ChicagoDave/pttracker",
+  "logo": "https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif",
+  "keywords": ["poker", "tracker", "node", "express", "sqlite", "typescript"],
+  "website": "https://github.com/ChicagoDave/pttracker",
+  "success_url": "/",
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment mode for the application",
+      "value": "production",
+      "required": true
+    },
+    "SESSION_SECRET": {
+      "description": "Secret key for session encryption. Auto-generated for security.",
+      "generator": "secret",
+      "required": true
+    },
+    "PORT": {
+      "description": "Port the server will listen on (Heroku sets this automatically)",
+      "value": "3000"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "echo 'Deployment successful! Access your app and create your first account.'"
+  },
+  "addons": [],
+  "stack": "heroku-22"
+}

@@ -2,6 +2,22 @@
 
 A mobile-friendly web application for tracking poker sessions, buy-ins, cash-outs, and profits. Built with Node.js, TypeScript, SQLite, and Bootstrap.
 
+## 🚀 One-Click Deploy
+
+Deploy your own instance in minutes - no technical knowledge required!
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/ChicagoDave/pttracker)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ChicagoDave/pttracker)
+
+**Quick Setup:**
+1. Click a deploy button above
+2. Create a free account (if you don't have one)
+3. The app will be deployed automatically with all settings configured
+4. Access your app URL and create your first account
+5. Start tracking your poker sessions from any device!
+
+**Note:** Heroku's free tier spins down after 30 minutes of inactivity. Render's free tier spins down after 15 minutes. First request after spin-down takes ~30 seconds.
+
 ## Features
 
 - **Session Management**: Track cash games and tournaments
@@ -20,6 +36,10 @@ A mobile-friendly web application for tracking poker sessions, buy-ins, cash-out
 - **Git** (for deployment)
 
 ## Quick Start
+
+**For the easiest setup**, use the [One-Click Deploy](#-one-click-deploy) buttons above!
+
+**For local development or manual setup:**
 
 ### 1. Clone the Repository
 
@@ -131,11 +151,17 @@ poker-tracker/
 
 ## Deployment
 
-This application can be deployed to various hosting platforms. See the `docs/deployment/` directory for detailed guides:
+### ⚡ Easiest: One-Click Deploy
 
-- **[Heroku](docs/deployment/HEROKU.md)** ([Sign up](https://signup.heroku.com/)) - Free tier available, easy deployment
-- **[Railway](docs/deployment/RAILWAY.md)** ([Sign up](https://railway.app/)) - Modern platform with free tier
-- **[Render](docs/deployment/RENDER.md)** ([Sign up](https://render.com/)) - Free tier with auto-deploy from GitHub
+Use the deploy buttons at the top of this README for instant deployment! No configuration needed.
+
+### 🔧 Alternative Hosting Platforms
+
+For more control or different platforms, see the `docs/deployment/` directory for detailed guides:
+
+- **[Heroku](docs/deployment/HEROKU.md)** ([Sign up](https://signup.heroku.com/)) - ⭐ One-click deploy available
+- **[Render](docs/deployment/RENDER.md)** ([Sign up](https://render.com/)) - ⭐ One-click deploy available
+- **[Railway](docs/deployment/RAILWAY.md)** ([Sign up](https://railway.app/)) - Deploy directly from GitHub, free tier
 - **[Fly.io](docs/deployment/FLY.md)** ([Sign up](https://fly.io/app/sign-up)) - Global app deployment with free allowance
 - **[DigitalOcean](docs/deployment/DIGITALOCEAN.md)** ([Sign up](https://www.digitalocean.com/)) - VPS deployment with full control
 

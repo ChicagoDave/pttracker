@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: poker-tracker
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DB_PATH
+        value: /data/poker.db
+    disk:
+      name: poker-data
+      mountPath: /data
+      sizeGB: 1
