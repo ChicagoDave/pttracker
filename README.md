@@ -8,29 +8,92 @@ A mobile-friendly web application for tracking poker sessions, buy-ins, cash-out
 - **Real-time Statistics**: Profit/loss, win rate, hourly rate
 - **Mobile-First Design**: Responsive interface for all devices
 - **Active Session Tracking**: Monitor ongoing games with easy cash-out
+- **User Authentication**: Secure login system with bcrypt password hashing
+- **CSV Import**: Import existing poker session data from CSV files
 - **Data Persistence**: SQLite database storage
 - **PWA Ready**: Can be installed on mobile devices
 
+## Prerequisites
+
+- **Node.js** 18.x or higher
+- **npm** 9.x or higher
+- **Git** (for deployment)
+
 ## Quick Start
 
-1. **Install Dependencies**
-   ```powershell
-   npm install
-   ```
+### 1. Clone the Repository
 
-2. **Build TypeScript**
-   ```powershell
-   npm run build
-   ```
+```bash
+git clone https://github.com/ChicagoDave/pttracker.git
+cd pttracker
+```
 
-3. **Start Development Server**
-   ```powershell
-   npm run dev
-   ```
+### 2. Set Up Environment Variables
 
-4. **Access the App**
-   - Open http://localhost:3000 in your browser
-   - The app will automatically create the SQLite database on first run
+Create a `.env` file in the root directory:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set a secure session secret:
+
+```env
+PORT=3000
+NODE_ENV=development
+SESSION_SECRET=your-super-secret-random-string-here
+DB_PATH=./poker.db
+```
+
+**IMPORTANT**: Change `SESSION_SECRET` to a long, random string. You can generate one using:
+
+```bash
+# On Linux/Mac
+openssl rand -base64 32
+
+# On Windows (PowerShell)
+[Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }))
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Build the Application
+
+```bash
+npm run build
+```
+
+### 5. Start the Server
+
+**Development mode** (with auto-reload):
+```bash
+npm run dev
+```
+
+**Production mode**:
+```bash
+npm start
+```
+
+### 6. Access the Application
+
+1. Open http://localhost:3000 in your browser
+2. On first run, you'll need to create an account
+3. The app will automatically create the SQLite database
+
+## First-Time User Setup
+
+When you first access the application:
+
+1. Navigate to http://localhost:3000
+2. You'll be redirected to the login page
+3. Click "Register" or navigate to the registration page
+4. Create your account with a username and password
+5. Log in and start tracking your poker sessions
 
 ## Available Scripts
 
@@ -68,7 +131,40 @@ poker-tracker/
 
 ## Deployment
 
+This application can be deployed to various hosting platforms. See the `docs/deployment/` directory for detailed guides:
+
+- **[Heroku](docs/deployment/HEROKU.md)** - Free tier available, easy deployment
+- **[Railway](docs/deployment/RAILWAY.md)** - Modern platform with free tier
+- **[Render](docs/deployment/RENDER.md)** - Free tier with auto-deploy from GitHub
+- **[Fly.io](docs/deployment/FLY.md)** - Global app deployment with free allowance
+- **[DigitalOcean](docs/deployment/DIGITALOCEAN.md)** - VPS deployment with full control
+
+### Quick Deployment Tips
+
+**Before deploying:**
+
+1. Set `NODE_ENV=production` in your environment variables
+2. Generate a secure `SESSION_SECRET` (use `openssl rand -base64 32`)
+3. The SQLite database will be created automatically on first run
+4. If using HTTPS, update the session cookie settings in [src/server.ts:27](src/server.ts#L27)
+
+**For VPS/Self-Hosted:**
+
+```bash
+# Install PM2 for process management
+npm install -g pm2
+
+# Start the app
+pm2 start dist/server.js --name poker-tracker
+
+# Save PM2 configuration
+pm2 save
+pm2 startup
+```
+
 ### Ubuntu/Apache Setup
+
+For detailed VPS setup instructions, see [docs/deployment/DIGITALOCEAN.md](docs/deployment/DIGITALOCEAN.md)
 
 1. **Install Node.js**
    ```bash
@@ -83,11 +179,15 @@ poker-tracker/
 
 3. **Deploy Application**
    ```bash
-   # Copy files to server
-   scp -r poker-tracker/ user@yourserver:/var/www/
-   
-   # On server
-   cd /var/www/poker-tracker
+   # Clone repository
+   git clone https://github.com/ChicagoDave/pttracker.git
+   cd pttracker
+
+   # Set up environment
+   cp .env.example .env
+   nano .env  # Edit with your settings
+
+   # Build and start
    npm run setup
    pm2 start dist/server.js --name "poker-tracker"
    pm2 startup
@@ -96,8 +196,13 @@ poker-tracker/
 
 4. **Configure Apache Reverse Proxy**
    ```apache
-   <VirtualHost *:80>
+   <VirtualHost *:443>
        ServerName poker.yourdomain.com
+
+       SSLEngine on
+       SSLCertificateFile /etc/letsencrypt/live/poker.yourdomain.com/fullchain.pem
+       SSLCertificateKeyFile /etc/letsencrypt/live/poker.yourdomain.com/privkey.pem
+
        ProxyPass / http://localhost:3000/
        ProxyPassReverse / http://localhost:3000/
        ProxyPreserveHost On
@@ -106,14 +211,97 @@ poker-tracker/
 
 ## Environment Variables
 
-Create a `.env` file in the root directory:
+The application uses the following environment variables:
 
-```env
-PORT=3000
-NODE_ENV=production
-DB_PATH=./poker.db
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `PORT` | No | `3000` | Port the server listens on |
+| `NODE_ENV` | No | `development` | Environment mode (`development` or `production`) |
+| `SESSION_SECRET` | **Yes** | None | Secret key for session encryption (must be set!) |
+| `DB_PATH` | No | `./poker.db` | Path to SQLite database file |
+
+Create a `.env` file based on `.env.example` and customize the values.
+
+## Security Considerations
+
+- Always set a strong `SESSION_SECRET` in production
+- Use HTTPS in production (set `cookie.secure: true` in [src/server.ts:27](src/server.ts#L27))
+- The default password hashing uses bcrypt with 10 rounds
+- Sessions expire after 24 hours
+- Keep your dependencies updated: `npm audit` and `npm update`
+
+## Troubleshooting
+
+### Database Issues
+
+If you encounter database errors:
+```bash
+# Stop the application
+pm2 stop poker-tracker  # or Ctrl+C if running directly
+
+# Remove the database (WARNING: This deletes all data!)
+rm poker.db
+
+# Restart the application (will create a fresh database)
+npm start
 ```
+
+### Port Already in Use
+
+If port 3000 is already in use:
+```bash
+# Change the PORT in your .env file
+echo "PORT=3001" >> .env
+
+# Or set it temporarily
+PORT=3001 npm start
+```
+
+### Build Errors
+
+If you encounter TypeScript build errors:
+```bash
+# Clean and rebuild
+rm -rf dist node_modules
+npm install
+npm run build
+```
+
+## Development
+
+### Running Tests
+
+```bash
+npm test
+```
+
+### Database Migrations
+
+The application automatically initializes the database on first run. To reset:
+
+```bash
+# View the database schema
+sqlite3 poker.db ".schema"
+
+# Run migrations manually
+npm run build
+node dist/database/db.js
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 MIT License - feel free to use for personal or commercial projects.
+
+## Support
+
+For issues and questions:
+- Open an issue on [GitHub](https://github.com/ChicagoDave/pttracker/issues)
+- Check the deployment guides in `docs/deployment/`
