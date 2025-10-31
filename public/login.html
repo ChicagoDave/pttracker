@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Poker Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --poker-green: #1a472a;
+            --poker-gold: #ffd700;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--poker-green) 0%, #0f2f18 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-header {
+            background: var(--poker-green);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .poker-icon {
+            font-size: 3rem;
+            color: var(--poker-gold);
+            margin-bottom: 1rem;
+        }
+        
+        .login-body {
+            padding: 2rem;
+        }
+        
+        .btn-login {
+            background: var(--poker-green);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+        }
+        
+        .btn-login:hover {
+            background: #0f2f18;
+        }
+        
+        .form-control:focus {
+            border-color: var(--poker-green);
+            box-shadow: 0 0 0 0.2rem rgba(26, 71, 42, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="login-card">
+                    <div class="login-header">
+                        <div class="poker-icon">♠</div>
+                        <h2 class="mb-0">Poker Tracker</h2>
+                        <p class="mb-0 mt-2 opacity-75">Please sign in to continue</p>
+                    </div>
+                    <div class="login-body">
+                        <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>
+                        
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control form-control-lg" id="username" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control form-control-lg" id="password" required>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">
+                                    Remember me
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-login btn-lg" id="loginBtn">
+                                    Sign In
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorAlert = document.getElementById('errorAlert');
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
+            errorAlert.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success - redirect to main app
+                    window.location.href = '/';
+                } else {
+                    // Show error
+                    errorAlert.textContent = data.error || 'Login failed';
+                    errorAlert.style.display = 'block';
+                }
+            } catch (error) {
+                errorAlert.textContent = 'Network error. Please try again.';
+                errorAlert.style.display = 'block';
+            } finally {
+                // Reset button
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Sign In';
+            }
+        });
+        
+        // Focus username field on load
+        document.getElementById('username').focus();
+    </script>
+</body>
+</html>

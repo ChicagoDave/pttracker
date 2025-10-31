@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a472a">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-success sticky-top">
+        <div class="container">
+            <span class="navbar-brand">
+                <span class="navbar-icon">♠</span> Poker Tracker
+            </span>
+            <div class="d-flex align-items-center">
+                <a href="/import" class="btn btn-outline-light btn-sm me-2">Import CSV</a>
+                <button class="btn btn-outline-light btn-sm" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-3">
+        <!-- Totals Bar -->
+        <div class="card mb-3 bg-light">
+            <div class="card-body py-2">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <small class="text-muted d-block">Total P&L</small>
+                        <h5 class="mb-0" id="totalProfitAll">$0</h5>
+                    </div>
+                    <div class="col-4">
+                        <small class="text-muted d-block">Live P&L</small>
+                        <h5 class="mb-0" id="totalProfitLive">$0</h5>
+                    </div>
+                    <div class="col-4">
+                        <small class="text-muted d-block">Online P&L</small>
+                        <h5 class="mb-0" id="totalProfitOnline">$0</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="current-tab" data-bs-toggle="tab" data-bs-target="#current-content" type="button" role="tab">
+                    Current Session
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-content" type="button" role="tab">
+                    Profit & Loss
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabContent">
+            <!-- Current Session Tab -->
+            <div class="tab-pane fade show active" id="current-content" role="tabpanel">
+                <!-- Progress Chart -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Progress Chart</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Filter buttons for chart -->
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Chart filter">
+                                <input type="radio" class="btn-check" name="chartFilter" id="chartFilterAll" value="all" checked>
+                                <label class="btn btn-outline-secondary" for="chartFilterAll">All</label>
+                                
+                                <input type="radio" class="btn-check" name="chartFilter" id="chartFilterLive" value="live">
+                                <label class="btn btn-outline-secondary" for="chartFilterLive">Live</label>
+                                
+                                <input type="radio" class="btn-check" name="chartFilter" id="chartFilterOnline" value="online">
+                                <label class="btn btn-outline-secondary" for="chartFilterOnline">Online</label>
+                            </div>
+                            <!-- Period selector -->
+                            <div class="btn-group btn-group-sm ms-2" role="group" aria-label="Period selector">
+                                <input type="radio" class="btn-check" name="chartPeriod" id="chartPeriod1m" value="1m" checked>
+                                <label class="btn btn-outline-secondary" for="chartPeriod1m">1M</label>
+                                
+                                <input type="radio" class="btn-check" name="chartPeriod" id="chartPeriod3m" value="3m">
+                                <label class="btn btn-outline-secondary" for="chartPeriod3m">3M</label>
+                                
+                                <input type="radio" class="btn-check" name="chartPeriod" id="chartPeriod6m" value="6m">
+                                <label class="btn btn-outline-secondary" for="chartPeriod6m">6M</label>
+                                
+                                <input type="radio" class="btn-check" name="chartPeriod" id="chartPeriod12m" value="12m">
+                                <label class="btn btn-outline-secondary" for="chartPeriod12m">12M</label>
+                                
+                                <input type="radio" class="btn-check" name="chartPeriod" id="chartPeriodAll" value="all">
+                                <label class="btn btn-outline-secondary" for="chartPeriodAll">All</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="yearProgressChart" width="400" height="150"></canvas>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Sessions</h6>
+                                <h4 class="text-primary" id="totalSessions">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Win Rate</h6>
+                                <h4 class="text-info" id="winRate">0%</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Hourly</h6>
+                                <h4 class="text-warning" id="hourlyRate">$0</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Active</h6>
+                                <h4 class="text-danger" id="activeSessions">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button class="btn btn-success btn-lg flex-fill" id="newCashBtn">
+                                New Cash Game
+                            </button>
+                            <button class="btn btn-primary btn-lg flex-fill" id="newTournamentBtn">
+                                New Tournament
+                            </button>
+                        </div>
+                        <div class="d-grid gap-2 mt-2">
+                            <button class="btn btn-outline-secondary" id="addCompletedBtn">
+                                Add Completed Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Sessions -->
+                <div id="activeSessions-container" class="mb-4" style="display: none;">
+                    <h5>Active Sessions</h5>
+                    <div id="activeSessionsList"></div>
+                </div>
+            </div>
+
+            <!-- Sessions History Tab -->
+            <div class="tab-pane fade" id="history-content" role="tabpanel">
+                <!-- Filter Buttons -->
+                <div class="card mb-3">
+                    <div class="card-body p-2">
+                        <div class="btn-group" role="group" aria-label="Transaction filter">
+                            <input type="radio" class="btn-check" name="transactionFilter" id="filterAll" value="all" checked>
+                            <label class="btn btn-outline-primary" for="filterAll">All</label>
+                            
+                            <input type="radio" class="btn-check" name="transactionFilter" id="filterLive" value="live">
+                            <label class="btn btn-outline-primary" for="filterLive">Live Sessions</label>
+                            
+                            <input type="radio" class="btn-check" name="transactionFilter" id="filterOnline" value="online">
+                            <label class="btn btn-outline-primary" for="filterOnline">Online Only</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sessions Summary Stats -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Total Profit/Loss</h6>
+                                <h4 id="summaryTotalProfit" class="mb-0">$0</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted" id="sessionsCountLabel">Total Sessions</h6>
+                                <h4 id="summaryTotalSessions" class="mb-0">0</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted" id="avgSessionLabel">Average Session</h6>
+                                <h4 id="summaryAvgSession" class="mb-0">$0</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted" id="totalHoursLabel">Total Hours</h6>
+                                <h4 id="summaryTotalHours" class="mb-0">0h</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sessions Table -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">All Sessions</h5>
+                        <button class="btn btn-outline-secondary btn-sm" id="refreshTableBtn">
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="sessionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Location/Account</th>
+                                        <th>Type</th>
+                                        <th>Buy-in</th>
+                                        <th>Cash Out</th>
+                                        <th>Profit/Loss</th>
+                                        <th>Running Total</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sessionsTableBody">
+                                    <!-- Sessions will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Version Info Footer -->
+        <div class="text-center text-muted mt-5 pt-3 border-top">
+            <small>
+                Poker Tracker v<span id="appVersion">1.0.0</span> | 
+                Build: <span id="buildDate">2025-01-01</span>
+            </small>
+        </div>
+    </div>
+
+    <!-- New Session Modal -->
+    <div class="modal fade" id="newSessionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newSessionForm">
+                        <input type="hidden" id="gameType" value="">
+                        
+                        <div class="mb-3">
+                            <label for="buyIn" class="form-label">Buy-in Amount ($)</label>
+                            <input type="number" class="form-control form-control-lg" id="buyIn" 
+                                   min="1" step="0.01" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <select class="form-control" id="location">
+                                <option value="">Select location...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="game" class="form-label">Game</label>
+                                <select class="form-control" id="game">
+                                    <option value="">Select game...</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="blinds" class="form-label">Blinds</label>
+                                <select class="form-control" id="blinds">
+                                    <option value="">Select blinds...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notes (Optional)</label>
+                            <textarea class="form-control" id="notes" rows="2" 
+                                      placeholder="Table conditions, strategy notes..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="startSessionBtn">Start Session</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Completed Session Modal -->
+    <div class="modal fade" id="completedSessionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Completed Session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="completedSessionForm">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Game Type</label>
+                                <select class="form-control" id="completedGameType" required>
+                                    <option value="cash">Cash Game</option>
+                                    <option value="tournament">Tournament</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="completedLocation" class="form-label">Location</label>
+                                <select class="form-control" id="completedLocation">
+                                    <option value="">Select location...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="completedGame" class="form-label">Game</label>
+                                <select class="form-control" id="completedGame">
+                                    <option value="">Select game...</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="completedBlinds" class="form-label">Blinds</label>
+                                <select class="form-control" id="completedBlinds">
+                                    <option value="">Select blinds...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="completedBuyIn" class="form-label">Buy-in ($)</label>
+                                <input type="number" class="form-control" id="completedBuyIn" 
+                                       min="1" step="0.01" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="completedCashOut" class="form-label">Cash Out ($)</label>
+                                <input type="number" class="form-control" id="completedCashOut" 
+                                       min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="startDateTime" class="form-label">Start Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="startDateTime" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="endDateTime" class="form-label">End Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="endDateTime" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="completedNotes" class="form-label">Notes (Optional)</label>
+                            <textarea class="form-control" id="completedNotes" rows="2" 
+                                      placeholder="Session details, strategy notes..."></textarea>
+                        </div>
+                        
+                        <div class="alert alert-info" id="profitDisplay" style="display: none;">
+                            <strong>Profit/Loss: </strong><span id="profitAmount">$0</span>
+                            <br><strong>Duration: </strong><span id="sessionDuration">0 minutes</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="saveCompletedBtn">Save Session</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Session Tracker Modal -->
+    <div class="modal fade" id="liveSessionModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <span class="navbar-icon">♠</span> Live Session - <span id="liveSessionType">Cash Game</span>
+                    </h5>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-light text-dark me-2" id="liveSessionTimer">0:00</span>
+                        <button type="button" class="btn btn-outline-light btn-sm" id="minimizeLiveSession">
+                            Minimize
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <!-- Session Info -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body py-2">
+                                    <small class="text-muted">Session Details</small>
+                                    <div><strong>Buy-in:</strong> <span id="liveSessionBuyIn">$0</span></div>
+                                    <div><strong>Location:</strong> <span id="liveSessionLocation">-</span></div>
+                                    <div><strong>Game:</strong> <span id="liveSessionGame">-</span> • <span id="liveSessionBlinds">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body py-2">
+                                    <small class="text-muted">Quick Stats</small>
+                                    <div><strong>Duration:</strong> <span id="liveSessionDuration">0m</span></div>
+                                    <div><strong>Hands Logged:</strong> <span id="liveHandCount">0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Hand Note Form -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">Add Hand Note</h6>
+                        </div>
+                        <div class="card-body">
+                            <form id="handNoteForm">
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control form-control-sm" id="handCards" 
+                                               placeholder="e.g., QQ, AKs, 72o" maxlength="10">
+                                        <small class="text-muted">Your cards</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-control form-control-sm" id="handPosition">
+                                            <option value="">Position</option>
+                                            <option value="UTG">UTG</option>
+                                            <option value="UTG+1">UTG+1</option>
+                                            <option value="MP">MP</option>
+                                            <option value="MP+1">MP+1</option>
+                                            <option value="CO">CO</option>
+                                            <option value="BTN">BTN</option>
+                                            <option value="SB">SB</option>
+                                            <option value="BB">BB</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-control form-control-sm" id="handResult">
+                                            <option value="">Result</option>
+                                            <option value="win">Win</option>
+                                            <option value="loss">Loss</option>
+                                            <option value="fold">Fold</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <textarea class="form-control" id="handNoteText" rows="3" 
+                                              placeholder="QQ in UTG, open $10, three callers. Flop is TJ9 rainbow. I bet $20, both villains call. Turn is a K no flush...">
+                                    </textarea>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted" id="handNoteCount">0/500 characters</small>
+                                    <button type="button" class="btn btn-primary btn-sm" id="addHandNoteBtn">
+                                        Add Hand Note
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Hand Notes List -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Hand Notes</h6>
+                            <button class="btn btn-outline-secondary btn-sm" id="exportHandNotesBtn">
+                                Export Notes
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="handNotesList" class="hand-notes-container">
+                                <div class="text-center text-muted p-3">
+                                    <p>No hand notes yet. Add your first hand above!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" id="addSessionNotesBtn">
+                        Session Notes
+                    </button>
+                    <button type="button" class="btn btn-danger" id="cashOutFromLiveBtn">
+                        Cash Out Session
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Session Modal -->
+    <div class="modal fade" id="editSessionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editSessionForm">
+                        <input type="hidden" id="editSessionId" value="">
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Game Type</label>
+                                <select class="form-control" id="editGameType" required>
+                                    <option value="cash">Cash Game</option>
+                                    <option value="tournament">Tournament</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="editLocation" class="form-label">Location</label>
+                                <select class="form-control" id="editLocation">
+                                    <option value="">Select location...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="editGame" class="form-label">Game</label>
+                                <select class="form-control" id="editGame">
+                                    <option value="">Select game...</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="editBlinds" class="form-label">Blinds</label>
+                                <select class="form-control" id="editBlinds">
+                                    <option value="">Select blinds...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="editBuyIn" class="form-label">Buy-in ($)</label>
+                                <input type="number" class="form-control" id="editBuyIn" 
+                                       min="1" step="0.01" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="editCashOut" class="form-label">Cash Out ($)</label>
+                                <input type="number" class="form-control" id="editCashOut" 
+                                       min="0" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3" id="editDateTimeRow">
+                            <div class="col-6">
+                                <label for="editStartDateTime" class="form-label">Start Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="editStartDateTime">
+                            </div>
+                            <div class="col-6">
+                                <label for="editEndDateTime" class="form-label">End Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="editEndDateTime">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="editNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="editNotes" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="alert alert-info" id="editProfitDisplay" style="display: none;">
+                            <strong>Profit/Loss: </strong><span id="editProfitAmount">$0</span>
+                            <br><strong>Duration: </strong><span id="editSessionDuration">0 minutes</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="saveEditBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cash Out Modal -->
+    <div class="modal fade" id="cashOutModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cash Out Session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="cashOutForm">
+                        <input type="hidden" id="cashOutSessionId" value="">
+                        
+                        <div class="mb-3">
+                            <label for="cashOutAmount" class="form-label">Cash Out Amount ($)</label>
+                            <input type="number" class="form-control form-control-lg" id="cashOutAmount" 
+                                   min="0" step="0.01" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Session Duration (minutes)</label>
+                            <input type="number" class="form-control" id="duration" 
+                                   min="1" placeholder="Auto-calculated from start time">
+                            <small class="form-text text-muted">Automatically calculated from session start time. Click to edit manually.</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cashOutNotes" class="form-label">Additional Notes</label>
+                            <textarea class="form-control" id="cashOutNotes" rows="2" 
+                                      placeholder="How did the session go?"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmCashOutBtn">Cash Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="text-center" style="display: none;">
+        <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

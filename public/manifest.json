@@ -1,0 +1,24 @@
+{
+  "name": "Poker Tracker",
+  "short_name": "PokerTracker",
+  "description": "Track your poker sessions and profits",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a472a",
+  "theme_color": "#1a472a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMxYTQ3MmEiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmQ3MDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICA8cGF0aCBkPSJNMTcgMTBjLjctLjctMS40LTMuM3YtMmw2LTJjLS4zLTEuMi0xLTItMi0yaC00LjVsLTEtMS42Yy0uNS0uOS0xLjYtMS40LTIuNS0xLjRzLTItLjUtMi41IDEuNGwtMSAxLjZINGMtMS0wLTEuNy44LTIgMmw2IDJ2MmMwIDIuNi0uNyAzLjMgMCAzLjNsMi41IDQuMmMuNS45IDEuNiAxLjQgMi41IDEuNHMyLS41IDIuNS0xLjRsMi41LTQuMnoiLz4KICA8cGF0aCBkPSJNNSAxNS41djMuNWMwIDEuMSAxIDIgMiAyaDEwYzEuMSAwIDItLjkgMi0ydi0zLjUiLz4KPC9zdmc+Cjwvc3ZnPgo=",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iNjQiIGZpbGw9IiMxYTQ3MmEiLz4KPHN2ZyB4PSIxMjgiIHk9IjEyOCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZkNzAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPHBhdGggZD0iTTE3IDEwYy43LS43LTEuNC0zLjN2LTJsNi0yYy0uMy0xLjItMS0yLTItMmgtNC41bC0xLTEuNmMtLjUtLjktMS42LTEuNC0yLjUtMS40cy0yLS41LTIuNSAxLjRsLTEgMS42SDRjLTEgMC0xLjcuOC0yIDJsNiAydjJjMCAyLjYtLjcgMy4zIDAgMy4zbDIuNSA0LjJjLjUuOSAxLjYgMS40IDIuNSAxLjRzMi0uNSAyLjUtMS40bDIuNS00LjJ6Ii8+CiAgPHBhdGggZD0iTTUgMTUuNXYzLjVjMCAxLjEgMSAyIDIgMmgxMGMxLjEgMCAyLS45IDItMnYtMy41Ii8+Cjwvc3ZnPgo8L3N2Zz4K",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["games", "utilities"],
+  "screenshots": []
+}

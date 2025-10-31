@@ -1,0 +1,394 @@
+/* Custom CSS for Poker Tracker */
+
+:root {
+  --poker-green: #1a472a;
+  --poker-gold: #ffd700;
+  --profit-color: #28a745;
+  --loss-color: #dc3545;
+}
+
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+  background-color: var(--poker-green) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-icon {
+  font-size: 1.5rem;
+  color: var(--poker-gold);
+}
+
+.profit-display {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.profit-positive {
+  color: var(--poker-gold) !important;
+}
+
+.profit-negative {
+  color: #ffcccb !important;
+}
+
+.stat-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.btn-lg {
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 12px 24px;
+}
+
+.session-item {
+  border: none;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+  transition: transform 0.2s ease;
+}
+
+.session-item:hover {
+  transform: translateY(-1px);
+}
+
+.session-profit {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.session-profit.positive {
+  color: var(--profit-color);
+}
+
+.session-profit.negative {
+  color: var(--loss-color);
+}
+
+.session-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.session-details {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.game-type-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.cash-game {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.tournament {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.active-session {
+  border-left: 4px solid var(--profit-color);
+  background-color: #f8fff9;
+}
+
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 16px 16px 0 0;
+}
+
+.form-control:focus {
+  border-color: var(--poker-green);
+  box-shadow: 0 0 0 0.2rem rgba(26, 71, 42, 0.25);
+}
+
+.btn-success {
+  background-color: var(--poker-green);
+  border-color: var(--poker-green);
+}
+
+.btn-success:hover {
+  background-color: #0f2f18;
+  border-color: #0f2f18;
+}
+
+.cash-out-btn {
+  background-color: var(--loss-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
+
+.cash-out-btn:hover {
+  background-color: #c82333;
+  color: white;
+}
+
+.delete-btn {
+  color: #dc3545;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  padding: 4px 8px;
+}
+
+.delete-btn:hover {
+  color: #c82333;
+  background-color: #f8d7da;
+  border-radius: 4px;
+}
+
+.btn-outline-primary.btn-sm {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .stat-card .card-body {
+    padding: 12px;
+  }
+  
+  .session-item .card-body {
+    padding: 12px;
+  }
+  
+  .btn-lg {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+  
+  .modal-dialog {
+    margin: 10px;
+  }
+  
+  .profit-display {
+    font-size: 1rem;
+  }
+}
+
+/* Touch targets for mobile */
+@media (pointer: coarse) {
+  .btn, .session-item {
+    min-height: 44px;
+  }
+  
+  .cash-out-btn, .delete-btn {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.empty-state h5 {
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+/* Success/Error states */
+.alert {
+  border-radius: 12px;
+  border: none;
+}
+
+.toast {
+  border-radius: 12px;
+}
+
+/* Live Session Tracker */
+.hand-notes-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.hand-note-item {
+  border-bottom: 1px solid #e9ecef;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.hand-note-item:hover {
+  background-color: #f8f9fa;
+}
+
+.hand-note-item:last-child {
+  border-bottom: none;
+}
+
+.hand-meta {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.hand-cards {
+  font-weight: bold;
+  color: #495057;
+}
+
+.hand-position {
+  background-color: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.hand-result {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.hand-result.win {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.hand-result.loss {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.hand-result.fold {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.live-session-timer {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+.minimized-live-session {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1060;
+  background: var(--poker-green);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.minimized-live-session:hover {
+  background: #0f2f18;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+.hand-note-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.session-info-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: none;
+}
+
+/* Year Progress Chart */
+#yearProgressChart {
+  max-height: 400px;
+}
+
+#yearSelector {
+  cursor: pointer;
+}
+
+.card-header h5 {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  #yearProgressChart {
+    max-height: 300px;
+  }
+}
+
+/* Totals Bar */
+.totals-bar {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+.totals-bar h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.totals-bar small {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Filter and Period buttons */
+.btn-group-sm .btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+}
+
+.btn-check:checked + .btn-outline-secondary {
+  background-color: var(--poker-green);
+  border-color: var(--poker-green);
+  color: white;
+}
